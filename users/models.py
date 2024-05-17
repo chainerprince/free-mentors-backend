@@ -10,6 +10,5 @@ class CustomUser(AbstractUser):
     bio = models.CharField(max_length=255)
     occupation = models.CharField(max_length=255,default="None")
     expertise = models.CharField(max_length=255,default="None")
-    is_active = models.BooleanField(default=True)
-    is_mentor = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
+    has_mentor_role = models.BooleanField(default=False)
+    has_admin_role = models.BooleanField(default=False)

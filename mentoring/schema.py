@@ -12,23 +12,22 @@ class MentorshipType(DjangoObjectType):
 
 class CreateMentorshipSession(graphene.Mutation):
     class Arguments:
-        requesting_user_id = graphene.ID(required=True)
+        mentee_id = graphene.ID(required=True)
         mentor_id = graphene.ID(required=True)
-        topic = graphene.String(required=True)
+        questions = graphene.String(required=True)
         description = graphene.String(required=True)
         scheduled_time = graphene.String(required=True)
 
     mentorship_session = graphene.Field(MentorshipType)
     
     @login_required
-    def mutate(root, info, requesting_user_id, mentor_id, topic, description, scheduled_time):       
+    def mutate(root, info, mentee_id, mentor_id, topic, description, scheduled_time):       
         mentorship_session = MentorshipSession(
-            requesting_user_id=requesting_user_id,
+            mentee_id=mentee_id,
             mentor_id=mentor_id,
-            topic=topic,
-            description=description,
+            questions=description,
             scheduled_time=scheduled_time,
-            is_accepted=None  
+            session_accepted=None  
         )
         mentorship_session.save()
         return CreateMentorshipSession(mentorship_session=mentorship_session)
@@ -62,7 +61,7 @@ class AcceptMentorshipSession(graphene.Mutation):
     @login_required
     def mutate(root, info, mentorship_session_id):       
         mentorship_session = MentorshipSession.objects.get(pk=mentorship_session_id)
-        mentorship_session.is_accepted = True
+        mentorship_session.session_accepted = True
         mentorship_session.save()
         return AcceptMentorshipSession(mentorship_session=mentorship_session)
 
